@@ -1,4 +1,94 @@
 # newrepos
-my first repository
 
-print("ddfs")
+
+
+import random
+
+compnumber = random.randint(1000,9999)
+cows = 0
+bulls = 0
+
+while  True:		
+	try:
+		usernumber = input("input a number\t")
+		if not usernumber.isdigit():
+			raise Exception("input a NUMBER")
+		if int(usernumber) < 1000 or int(usernumber) > 9999:
+			raise Exception("input 4-digit number")
+		break
+	except Exception as e:
+		print(e)
+
+a = str(compnumber)
+complist = [a[0],a[1],a[2],a[3]]
+
+b = str(usernumber)
+userlist = [b[0],b[1],b[2],b[3]]
+# print(userlist)
+# print(complist)
+	
+for i in range(4):
+	if a[i] == b[i]:
+		cows += 1
+	elif userlist[i] in complist:
+		bulls += 1
+print("cows\t", f"{cows}")
+print("bulls\t",f"{bulls}")
+while cows < 4:
+	cows = 0
+	bulls = 0
+
+	while  True:		
+		try:
+			usernumber = input("input a number\t")
+			if not usernumber.isdigit():
+				raise Exception("input a NUMBER")
+			if int(usernumber) < 1000 or int(usernumber) > 9999:
+				raise Exception("input 4-digit number")
+			break
+		except Exception as e:
+			print(e)
+
+	a = str(compnumber)
+	complist = [a[0],a[1],a[2],a[3]]
+
+	b = str(usernumber)
+	userlist = [b[0],b[1],b[2],b[3]]
+	# print(userlist)
+	# print(complist)
+		
+	for i in range(4):
+		if a[i] == b[i]:
+			cows += 1
+		elif b[i] in complist:
+			bulls += 1
+	print("cows\t", f"{cows}")
+	print("bulls\t",f"{bulls}")
+
+print(F"You win, the number is {compnumber}")
+
+
+
+
+# 2
+		
+import itertools
+
+# d ={'1':['a','b'], '2':['c','d']}
+# for combo in itertools.product(*[d[k] for k in sorted(d.keys())]):
+#     print(''.join(combo))
+# a = {'1':['a','b'], '2':['c','d']}
+
+a = {'1':['a','b'], '2':['c','d'], "3":["e","f"]}
+list1 = a["1"]
+list2 = a["2"]
+list3 = a["3"]
+b = list(itertools.product(list1,list2,list3))
+print(b)
+s = ""
+for i in b:
+	for j in i:
+		s += j
+	print(s)
+	s = ""
+
