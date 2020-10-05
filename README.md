@@ -1,4 +1,4 @@
 # newrepos
 my first repository
 
-fghhngbdxm
+print("ddfs")
