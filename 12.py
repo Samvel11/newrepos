@@ -27,7 +27,7 @@ class Homework:
 
 word =  input("input a word\n")
 example = Homework(word)
-
+# sdfsdfsdfsdf
 print("Dictionary ")
 print(example.dictionary(),"\n")
 print("without duplicates")
