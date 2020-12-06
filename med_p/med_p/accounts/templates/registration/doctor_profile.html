@@ -1,0 +1,19 @@
+{% extends "med_app/nav_bar.html" %}
+{% block content %}
+<h1>doctor</h1>
+
+<div class="todo-list">
+	<h3>Profile</h3>
+		<strong>Name: {{doctor.user.username}}</strong>
+		<br>
+		<image src="{{doctor.user_image.url}}" alt="asdsad" width="150" height="150"></image>
+		<br>
+		<strong>Age: {{doctor.email}}</strong>
+		<br>
+		<div class="item-row">
+				<a href="{% url 'doctor_profile_update' %}"><button class="btn btn-success" type="submit" name="Update Profile">Update Profile</button></a>
+		</div>
+
+
+	</div>
+{% endblock content %}
