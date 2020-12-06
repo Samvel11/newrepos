@@ -1,0 +1,22 @@
+{% extends "med_app/nav_bar.html" %}
+{% block content %}
+<h1>chat</h1>
+
+{% for message in messages %}
+    <div>
+        {% if message.sender == this_user %}
+            <p style="font-weight: bold;">{{ this_user_name }}/p>
+        {% else %}
+            <p style="font-weight: bold;">{{ to_name }}</p>
+        {% endif %}
+        <p>{{message.message}}</p>
+    </div>
+    <br>
+{% endfor %}
+
+<form method="POST" action="{% url 'send_message' user=to %}">
+    {% csrf_token %}
+    <textarea name="message" id="message_area" cols="30" rows="10"></textarea>
+    <button type="submit">Send</button>
+</form>
+{% endblock content %}

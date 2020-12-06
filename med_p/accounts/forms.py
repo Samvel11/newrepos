@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import inlineformset_factory, ModelForm
 from django.contrib.auth.models import User
-from .models import Patient, Doctor
+from .models import Patient, Doctor, Messages
 from django import forms
 
 # from dobwidget import DateOfBirthWidget
@@ -10,6 +10,11 @@ class UserForm(UserCreationForm):
 	class Meta:
 		model = User
 		fields = ['username', 'password1', 'password2']
+
+class ChatForm(ModelForm):
+	class Meta:
+		model = Messages
+		fields = '__all__'
 
 
 class PatientRegisterForm(ModelForm):

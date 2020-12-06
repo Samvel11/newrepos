@@ -33,7 +33,7 @@ class Patient(models.Model):
 	#image = models.ImageField(default = 'default.jpg', upload_to = 'profile_pics')
 
 	def __str__(self):
-		return str(self.user.username)
+		return str(self.user)
 
 class Doctor(models.Model):
 	user = models.OneToOneField(User,on_delete = models.CASCADE, primary_key = True)
@@ -47,8 +47,12 @@ class Doctor(models.Model):
 	# user_type = models.CharField(max_length=20, default = 'd')
 
 	def __str__(self):
-		return str(self.user.username)
+		return str(self.user)
 
+class Messages(models.Model):
+	to = models.CharField(max_length = 20, null = True)
+	sender = models.CharField(max_length = 20, null = True)
+	message = models.CharField(max_length = 20, null=True)
 
 	# def get_username(self):
     # 	return self.username

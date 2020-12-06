@@ -1,4 +1,13 @@
 {% extends "med_app/nav_bar.html" %}
 {% block content %}
-<h1>patient</h1>
+<h1>{{ patient.first_name }} {{ patient.last_name }}</h1><br>
+
+{% for doctor in doctors %}
+    <div>
+        <h1>{{ doctor.first_name }} {{ doctor.last_name }}</h1>
+        <h2>{{ doctor.user }}</h2>
+        <a href="{% url 'chat' user=doctor.user %}" style="color: #000000; text-decoration: none;font-size: 18px;">Chat</a>
+    </div><br>
+{% endfor %}
+
 {% endblock content %}

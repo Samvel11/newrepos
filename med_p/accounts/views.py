@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
-from .models import Patient, Doctor
-
-from .forms import UserForm, PatientRegisterForm, DoctorRegisterForm
+from .models import Patient, Doctor, Messages
+from .forms import UserForm, PatientRegisterForm, DoctorRegisterForm, ChatForm
 from django.contrib.auth.decorators import login_required
 import os
+from django.db.models import Q
+
 # from .models import UserType
 # Create your views here.
 
@@ -25,12 +26,11 @@ def patient_register(request):
 			patient = form_patient.save(commit = False)
 			patient.user = user_p
 			patient.save()
-			return render(request, "registration/patient_profile.html")
+			context = {'doctors': 'aaaaaaaaaaa'}
+			return render(request, "registration/patient_profile.html", context)
 
 
-	context = {'form_user':form_user,
-				'form_patient':form_patient
-				}
+	context = {'form_user':form_user,'form_patient':form_patient}
 
 			# username = form.cleaned_data.get('username')
 			# password = form.cleaned_data.get('password1')
@@ -145,7 +145,7 @@ def doctor_profile(request):
 #             return redirect('#')
 #         else:
 #             messages.info(request, "invalild username or password")
-#             return redirect('login')
+#             return redirect('login')context = {'doctors': 'aaaaaaaaaaa'}
 #     else:
 #         return render(request, 'med_app/login.html')
 
@@ -179,7 +179,7 @@ def login_page(request):
     print("#######", request.method)
     if request.method == 'POST':
         username = request.POST.get('username')
-	
+
         password = request.POST.get('password1')
         user = authenticate(username=username, password=password)
         print("########", user)
@@ -187,10 +187,62 @@ def login_page(request):
             login(request, user)
             print(user)
             patient = Patient.objects.all().filter(user_id=request.user.id)
-            doctor = Doctor.objects.all().filter(user_id = request.user.id)
+            doctor = Doctor.objects.all().filter(user_id=request.user.id)
+            doctors = Doctor.objects.all()
             if len(patient) != 0:
-                return redirect('patient_profile')
+                context = {'patient': patient, 'doctors': doctors}
+                return render(request, "registration/patient_profile.html", context)
             else:
-                return redirect('doctor_profile')
+                return render(request, "registration/doctor_profile.html")
     else:
         return render(request, 'registration/login_page.html')
+
+def chat(request, user):
+    messages = Messages.objects.all().filter((Q(sender = request.user.id) & Q(to = user)) | (Q(sender = user) & Q(to = request.user.id)))
+
+    # patient = Patient.objects.get(user=user)
+
+    try:
+        patient = Patient.objects.get(user=user)
+    except Patient.DoesNotExist:
+        patient = None
+    
+    try:
+        doctor = Doctor.objects.get(user=user)
+    except Doctor.DoesNotExist:
+        doctor = None
+
+    print("///////////// ", doctor.first_name)
+
+    patient1 = Patient.objects.get(user=request.user)
+    doctor1 = Doctor.objects.get(user=request.user)
+
+    if len(patient) != 0:
+        to_name = patient.first_name + ' ' + patient.last_name
+    else:
+        to_name = doctor.first_name + ' ' + doctor.last_name
+
+    if len(patient1) != 0:
+        this_user_name = patient1.first_name + ' ' + patient1.last_name
+    else:
+        this_user_name = doctor1.first_name + ' ' + doctor1.last_name
+        
+    context = {
+        'this_user': request.user.id,
+        'this_user_name': this_user_name,
+        'to': user,
+        'messages': messages,
+        'to_name': to_name
+    }
+    return render(request, 'chat.html', context)
+
+def send_message(request, user):
+    chatForm = ChatForm()
+    if request.method == 'POST':
+        messages = chatForm.save(commit = False)
+        messages.message = request.POST.get('message')
+        messages.to = user
+        messages.sender = request.user
+        messages.save()
+
+    return redirect('chat', user=user)
